@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class InvoiceDto {
     private Long id;
     private Long orderId;
-    private BigDecimal totalAmount;
+    private Double totalAmount;
     private List<String> items;
     private Instant createAt;
 }

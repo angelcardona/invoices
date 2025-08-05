@@ -12,5 +12,6 @@ public class OrderItemDto {
     private Long dishId;
     private String dishName;
     private Integer quantity;
+    private Double price;
 
 }

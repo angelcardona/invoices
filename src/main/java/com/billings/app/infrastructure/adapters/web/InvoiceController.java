@@ -28,12 +28,12 @@ public class InvoiceController {
     private final IInvoiceUsesCases usesCases;
     private final OrderWebMapper orderMapper;
 
-    @PostMapping
+    @PostMapping("/{orderId}")
     public ResponseEntity<InvoiceDto> generateInvoice(@PathVariable Long orderId){
         InvoiceDto invoiceDto= mapper.toDto(usesCases.generateInvoice(orderId));
         return ResponseEntity.ok(invoiceDto);
     }
-    @PostMapping
+    @PostMapping("/accept/{orderId}")
     public ResponseEntity<OrderDto> acceptOrder(@PathVariable Long orderId){
         
         OrderDto orderDto=orderMapper.toDto(usesCases.acceptOrder(orderId));
@@ -41,7 +41,7 @@ public class InvoiceController {
                         
         
     }
-    @PostMapping
+    @PostMapping("/cancel/{orderId}")
     public ResponseEntity<OrderDto> cancelOrder(@PathVariable Long orderId){
         
         OrderDto orderDto=orderMapper.toDto(usesCases.cancelOrder(orderId));

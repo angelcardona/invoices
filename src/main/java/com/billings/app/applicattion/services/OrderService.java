@@ -8,15 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.billings.app.applicattion.ports.in.IOrdeUsesCases;
 import com.billings.app.applicattion.ports.out.IOrderPersistence;
+import com.billings.app.domain.models.Dish;
 import com.billings.app.domain.models.Order;
 import com.billings.app.domain.models.OrderItem;
+import com.billings.app.infrastructure.adapters.webClient.DishClient;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService implements IOrdeUsesCases{
     
     private final IOrderPersistence persistence;
+    private final DishClient dishClient;
     
     
     
@@ -45,14 +49,16 @@ public class OrderService implements IOrdeUsesCases{
 
     @Override
     public Order addItem(Long orderId, OrderItem orderItem) {
-        Optional<Order>orderEXisting= persistence.findOrderById(orderId);
-        if (orderEXisting.isPresent()) {
-            Order order = orderEXisting.get();
+        Order order = persistence.findOrderById(orderId)
+                    .orElseThrow(()-> new RuntimeException());
+        try {
+            Long dishId =orderItem.getDish().getId();
+            Dish dish = dishClient.getDishById(dishId);
+            orderItem.setDish(dish);
             order.addItem(orderItem);
             return persistence.save(order);
-            
-        }else{
-            throw new RuntimeException("Order not Found By Id");
+        } catch (FeignException.NotFound e) {
+            throw new RuntimeException("Dish Not Found in menu service");
         }
     }
 

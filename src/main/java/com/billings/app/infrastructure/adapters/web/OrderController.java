@@ -36,16 +36,16 @@ public class OrderController {
     @PostMapping
     public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody OrderDto orderDtoRequest){
         OrderDto orderdto =mapper.toDto(usesCases.createOrder(mapper.toDomain(orderDtoRequest)));
-        return ResponseEntity.ok(orderdto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderdto);
 
     }
-    @DeleteMapping("{orderId}")
+    @DeleteMapping("/{orderId}")
     public ResponseEntity<Void> deleteOrder(@PathVariable Long orderId){
         usesCases.deleteOrder(orderId);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
     }
-    @GetMapping("{orderId}")
+    @GetMapping("/{orderId}")
     public ResponseEntity<OrderDto> getById(@PathVariable Long orderId){
         return usesCases.getOrderById(orderId)  
                         .map(mapper::toDto)
@@ -57,14 +57,14 @@ public class OrderController {
         List<OrderDto> orderDtos = mapper.toDtoList(usesCases.getAllOrders());
         return ResponseEntity.ok(orderDtos);
     }
-    @PostMapping("addItem/{orderId}")
+    @PostMapping("/{orderId}/items")
     public ResponseEntity<OrderDto> addOrderItem(@PathVariable Long orderId, @Valid @RequestBody OrderItemDto orderItemDto){
         Order order = usesCases.addItem(orderId,itemMpper.toDomain(orderItemDto));
         OrderDto orderDto=mapper.toDto(order);
         return new ResponseEntity<>(orderDto,HttpStatus.OK);
 
     }
-    @DeleteMapping("removeItem/{ordeId}/{orderItem}")
+    @DeleteMapping("/{orderId}/items/{orderItemId}")
     public ResponseEntity<OrderDto> removeItem(@PathVariable Long orderId,@PathVariable Long orderItem){
         Order order = usesCases.removeItem(orderItem, orderId);
         OrderDto orderDto = mapper.toDto(order);

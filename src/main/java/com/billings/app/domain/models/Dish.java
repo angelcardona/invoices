@@ -10,6 +10,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Dish {
+    private Long id;
+    private String name;
     private Double price;
+    
 
 }

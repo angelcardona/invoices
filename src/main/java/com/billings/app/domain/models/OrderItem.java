@@ -12,8 +12,6 @@ import lombok.Setter;
 public class OrderItem {
 
     private Long id;
-    private Long dishId;
-    private String dishName;
     private Integer quantity;
     private Dish dish;
 

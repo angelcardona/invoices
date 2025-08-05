@@ -56,10 +56,10 @@ public class InvoiceServices implements IInvoiceUsesCases{
             throw new IllegalArgumentException();
         }
         List<String> itemDescriptions=orderPresent.getItems().stream()
-            .map(item-> item.getDishName() + " x " + item.getQuantity())
+            .map(item-> item.getDish() + " x " + item.getQuantity())
             .collect(Collectors.toList());
             
-            Invoice invoice = new Invoice(orderId, orderPresent.getId(), orderPresent.getTotalAmount(), itemDescriptions, Instant.now());
+            Invoice invoice = new Invoice(null, orderPresent.getId(), orderPresent.getTotalAmount(), itemDescriptions, Instant.now());
             return port.save(invoice);
     }
 

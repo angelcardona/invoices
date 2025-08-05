@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
+
 import com.billings.app.applicattion.ports.out.IOrderPersistence;
 import com.billings.app.domain.models.Order;
+import com.billings.app.domain.models.OrderItem;
+import com.billings.app.infrastructure.adapters.persitence.entity.OrderEntity;
 import com.billings.app.infrastructure.adapters.persitence.mapper.IOrderRepositoryMapper;
 import com.billings.app.infrastructure.adapters.persitence.repository.IOrderJpaRepository;
 
@@ -18,10 +21,16 @@ public class OrderPersistenceAdapter implements IOrderPersistence{
 
     private final IOrderJpaRepository repository;
     private final IOrderRepositoryMapper mapper;
+    private final OrderItemPersistenceAdapter adapter;
 
     @Override
     public Order save(Order order) {
-        return mapper.toDomain(repository.save(mapper.toEntity(order)));
+        OrderEntity orderEntity=mapper.toEntity(order);
+        OrderEntity savedOrder=repository.save(orderEntity);
+        for(OrderItem item: order.getItems()){
+            adapter.save(item);
+        }
+        return mapper.toDomain(savedOrder);
     }
 
     @Override

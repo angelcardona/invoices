@@ -32,11 +32,11 @@ public class Order {
         return total;
     }
     public void addItem(OrderItem orderItem){
-        items.add(orderItem);
+        this.items.add(orderItem);
 
     }
     public void removeItem(Long orderItem){
-        items.remove(orderItem.intValue());
+        this.items.removeIf(item->item.getId().equals(orderItem));
     }
 
 }

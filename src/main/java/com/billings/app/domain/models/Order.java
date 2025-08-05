@@ -33,6 +33,7 @@ public class Order {
     }
     public void addItem(OrderItem orderItem){
         this.items.add(orderItem);
+        orderItem.setOrder(this);
 
     }
     public void removeItem(Long orderItem){

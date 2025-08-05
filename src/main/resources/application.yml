@@ -15,3 +15,8 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+logging:
+  level:
+    root: DEBUG
+    com.billings.app: DEBUG

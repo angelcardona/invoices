@@ -14,6 +14,7 @@ public class OrderItem {
     private Long id;
     private Integer quantity;
     private Dish dish;
+    private Order order;
 
     public Double getTotal(){
         

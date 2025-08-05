@@ -1,8 +1,9 @@
 package com.billings.app.applicattion.services;
 
+
 import java.util.List;
 import java.util.Optional;
-
+import java.util.logging.Logger;
 
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService implements IOrdeUsesCases{
-    
+    private static final Logger LOGGER = Logger.getLogger(OrderService.class.getName());
     private final IOrderPersistence persistence;
     private final DishClient dishClient;
     
@@ -26,6 +27,18 @@ public class OrderService implements IOrdeUsesCases{
     
     @Override
     public Order createOrder(Order order) {
+        if(order.getItems()!= null){
+            for (OrderItem item: order.getItems()){
+                try {
+                    Long dishId=item.getDish().getId();
+                    Dish fullDish=dishClient.getDishById(dishId);
+                    LOGGER.info("Plato recibido del dishclient:{}"+ fullDish);
+                    item.setDish(fullDish);
+                } catch (FeignException.NotFound e) {
+                    throw new RuntimeException();
+                }
+            }
+        }
         return persistence.save(order);
 
         

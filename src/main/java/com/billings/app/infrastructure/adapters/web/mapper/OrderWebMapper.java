@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 
 import com.billings.app.domain.models.Order;
 import com.billings.app.infrastructure.adapters.web.dto.OrderDto;
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = IOrderItemWebMapper.class)
 public interface OrderWebMapper {
 
     Order toDomain (OrderDto orderDto);

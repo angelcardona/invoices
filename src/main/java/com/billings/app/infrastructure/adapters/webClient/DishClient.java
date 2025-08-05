@@ -9,6 +9,6 @@ import com.billings.app.domain.models.Dish;
 @FeignClient(name = "menus-service", url = "http://localhost:8081")
 public interface DishClient {
 
-    @GetMapping("dishes/{dishId}")
+    @GetMapping("dish/{dishId}")
     Dish getDishById(@PathVariable("dishId") Long dishId);
 }
